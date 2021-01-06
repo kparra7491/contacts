@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 
 import { ContactCard } from "../component/ContactCard.js";
 import { Modal } from "../component/Modal";
 
+import { GlobalState } from "../store/appContext";
+
 export const Contacts = () => {
 	const [state, setState] = useState({
 		showModal: false
 	});
+	const { store, actions } = useContext(GlobalState);
 
 	return (
 		<div className="container">
@@ -17,12 +20,16 @@ export const Contacts = () => {
 						Add new contact
 					</Link>
 				</p>
+				<p className="text-right my-3">
+					<Link className="btn btn-success" to="/edit">
+						Edit contact
+					</Link>
+				</p>
 				<div id="contacts" className="panel-collapse collapse show" aria-expanded="true">
 					<ul className="list-group pull-down" id="contact-list">
-						<ContactCard onDelete={() => setState({ showModal: true })} />
-						<ContactCard />
-						<ContactCard />
-						<ContactCard />
+						{store.contacts.map((item, i) => {
+							return <ContactCard key={i} onDelete={() => setState({ showModal: true })} />;
+						})}
 					</ul>
 				</div>
 			</div>
